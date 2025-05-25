@@ -1,5 +1,35 @@
+import { useState, useEffect } from "react";
+
 function Home() {
-  return <h2>Home Page</h2>;
+  const [fact, setFact] = useState(null);
+  const [favorites, setFavorites] = useState([]);
+
+  useEffect(() => {
+    getFact();
+  }, []);
+
+  function getFact() {
+    setFact(null);
+    fetch("https://uselessfacts.jsph.pl/api/v2/facts/random?language=en")
+      .then((response) => response.json())
+      .then((data) => setFact(data.text));
+  }
+  function addToFavorites() {
+    if (fact && !favorites.includes(fact)) {
+      setFavorites([...favorites, fact]);
+    }
+  }
+  return (
+    <div>
+      <h2>Weird Science Fact</h2>
+      <p>Did you know?</p>
+      {fact ? <p>{fact}</p> : <p>Loading...</p>}
+      <button onClick={getFact}>Get Random Fact</button>
+      {fact && !favorites.includes(fact) && (
+        <button onClick={addToFavorites}>Save to Favorites</button>
+      )}
+    </div>
+  );
 }
 
 export default Home;
