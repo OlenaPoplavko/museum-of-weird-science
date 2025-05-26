@@ -8,7 +8,7 @@ function Navbar() {
           <Link to="/">Home</Link>
         </li>
         <li>
-          <Link to="/favourites">Favourites</Link>
+          <Link to="/Favorites">Favorites</Link>
         </li>
       </ul>
     </nav>
