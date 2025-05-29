@@ -1,31 +1,36 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Favorites() {
-  const [favorites, setFavorites] = useState([]);
-  useEffect(() => {
+  const [favorites, setFavorites] = useState(() => {
     const saved = localStorage.getItem("favorites");
-    setFavorites(saved ? JSON.parse(saved) : []);
-  }, []);
+    return saved ? JSON.parse(saved) : [];
+  });
+  const navigate = useNavigate();
 
-  function removeFavorite(idx) {
-    const updated = favorites.filter((_, i) => i !== idx);
+  const handleDelete = (index) => {
+    const updated = favorites.filter((_, i) => i !== index);
     setFavorites(updated);
     localStorage.setItem("favorites", JSON.stringify(updated));
-  }
+  };
+
+  const handleView = (index) => {
+    navigate(`/fact/${index}`);
+  };
 
   return (
     <div>
       <h2>My Favorites</h2>
+
       {favorites.length === 0 ? (
         <p>No favorites yet.</p>
       ) : (
         <ul>
-          {favorites.map((fact, idx) => (
-            <li key={idx}>
-              {fact}
-              <Link to={`/fact/${idx}`}>View</Link>
-              <button onClick={() => removeFavorite(idx)}>Delete</button>
+          {favorites.map((fact, index) => (
+            <li key={index}>
+              <span>{fact}</span>
+              <button onClick={() => handleView(index)}>View</button>
+              <button onClick={() => handleDelete(index)}>Delete</button>
             </li>
           ))}
         </ul>
