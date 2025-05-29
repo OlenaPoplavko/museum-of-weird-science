@@ -1,11 +1,8 @@
-import { useState } from "react";
+import useLocalStorage from "../hooks/useLocalStorage";
 import { useNavigate } from "react-router-dom";
 
 function Favorites() {
-  const [favorites, setFavorites] = useState(() => {
-    const saved = localStorage.getItem("favorites");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [favorites, setFavorites] = useLocalStorage("favorites", []);
   const navigate = useNavigate();
 
   const handleDelete = (index) => {

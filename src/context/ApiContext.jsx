@@ -1,13 +1,10 @@
 import React, { createContext, useState, useEffect } from "react";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 export const ApiContext = createContext();
-ApiContext.displayName = "ApiContext";
 
 export function ApiProvider({ children }) {
-  const [fact, setFact] = useState(() => {
-    const saved = localStorage.getItem("lastFact");
-    return saved ? saved : null;
-  });
+  const [fact, setFact] = useLocalStorage("lastFact", null);
   const [loading, setLoading] = useState(fact === null);
   const [error, setError] = useState(null);
 

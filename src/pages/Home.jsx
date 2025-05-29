@@ -1,13 +1,11 @@
 import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ApiContext } from "../context/ApiContext";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 function Home() {
   const { fact, loading, error, getFact } = useContext(ApiContext);
-  const [favorites, setFavorites] = useState(() => {
-    const saved = localStorage.getItem("favorites");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [favorites, setFavorites] = useLocalStorage("favorites", []);
 
   useEffect(() => {
     localStorage.setItem("favorites", JSON.stringify(favorites));
