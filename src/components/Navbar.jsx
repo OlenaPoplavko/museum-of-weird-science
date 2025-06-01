@@ -7,9 +7,6 @@ function Navbar() {
     <nav>
       <ul>
         <li>
-          {location.pathname !== "/" && (
-            <button onClick={() => navigate(-1)}>Back</button>
-          )}
           <Link to="/">Home</Link>
         </li>
         <li>

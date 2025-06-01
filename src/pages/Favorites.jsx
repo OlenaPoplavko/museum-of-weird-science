@@ -22,7 +22,7 @@ function Favorites() {
       {favorites.length === 0 ? (
         <p>No favorites yet.</p>
       ) : (
-        <ul>
+        <ul className="favorites-list">
           {favorites.map((fact, index) => (
             <li key={index}>
               <span>{fact}</span>

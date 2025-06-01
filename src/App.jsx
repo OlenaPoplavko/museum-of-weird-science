@@ -8,11 +8,13 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/favorites" element={<Favorites />} />
-        <Route path="/fact/:id" element={<FactPage />} />
-      </Routes>
+      <div className="container">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/favorites" element={<Favorites />} />
+          <Route path="/fact/:id" element={<FactPage />} />
+        </Routes>
+      </div>
     </BrowserRouter>
   );
 }
