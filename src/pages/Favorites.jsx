@@ -1,5 +1,7 @@
 import useLocalStorage from "../hooks/useLocalStorage";
 import { useNavigate } from "react-router-dom";
+import { Eye, Trash } from "lucide-react";
+import "./Favorites.css";
 
 function Favorites() {
   const [favorites, setFavorites] = useLocalStorage("favorites", []);
@@ -8,29 +10,44 @@ function Favorites() {
   const handleDelete = (index) => {
     const updated = favorites.filter((_, i) => i !== index);
     setFavorites(updated);
-    localStorage.setItem("favorites", JSON.stringify(updated));
   };
 
   const handleView = (index) => {
-    navigate(`/fact/${index}`);
+    const fact = favorites[index];
+    localStorage.setItem("currentFact", fact);
+    navigate("/fact/current");
   };
 
   return (
-    <div>
-      <h2>My Favorites</h2>
+    <div className="favorites-container">
+      <h2 className="favorites-title">My Favorites</h2>
 
       {favorites.length === 0 ? (
-        <p>No favorites yet.</p>
+        <p className="favorites-empty">No favorites yet.</p>
       ) : (
-        <ul className="favorites-list">
+        <div className="favorites-list">
           {favorites.map((fact, index) => (
-            <li key={index}>
-              <span>{fact}</span>
-              <button onClick={() => handleView(index)}>View</button>
-              <button onClick={() => handleDelete(index)}>Delete</button>
-            </li>
+            <div className="favorite-card" key={index}>
+              <p className="favorite-text">{fact}</p>
+              <div className="favorite-buttons">
+                <button
+                  onClick={() => handleView(index)}
+                  className="icon-button view"
+                  title="View"
+                >
+                  <Eye size={18} />
+                </button>
+                <button
+                  onClick={() => handleDelete(index)}
+                  className="icon-button delete"
+                  title="Delete"
+                >
+                  <Trash size={18} />
+                </button>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

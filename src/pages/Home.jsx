@@ -1,21 +1,22 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { ApiContext } from "../context/ApiContext";
 import useLocalStorage from "../hooks/useLocalStorage";
+import FactCard from "../components/FactCard";
 
 function Home() {
   const { fact, loading, error, getFact } = useContext(ApiContext);
   const [favorites, setFavorites] = useLocalStorage("favorites", []);
-
-  useEffect(() => {
-    localStorage.setItem("favorites", JSON.stringify(favorites));
-  }, [favorites]);
-
   const navigate = useNavigate();
 
+  const isFavorite = favorites.includes(fact);
+
   function addToFavorites() {
-    if (fact && !favorites.includes(fact)) {
+    if (fact && !favorites.some((f) => f === fact)) {
       setFavorites([...favorites, fact]);
+      console.log("Saved to favorites:", fact);
+    } else {
+      console.log("Already in favorites:", fact);
     }
   }
 
@@ -26,21 +27,19 @@ function Home() {
 
   return (
     <div>
-      <h2>Weird Science Fact</h2>
-      <p>Did you know?</p>
-
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
         <p>Error: {error.message}</p>
       ) : (
-        <p>{fact}</p>
-      )}
-
-      <button onClick={getFact}>Get Random Fact</button>
-      <button onClick={viewCurrentFact}>View</button>
-      {fact && !favorites.includes(fact) && (
-        <button onClick={addToFavorites}>Save to Favorites</button>
+        <FactCard
+          title="Weird Science Fact"
+          description={fact}
+          onGetRandomFact={getFact}
+          onView={viewCurrentFact}
+          onSaveToFavorites={addToFavorites}
+          isFavorite={isFavorite}
+        />
       )}
     </div>
   );

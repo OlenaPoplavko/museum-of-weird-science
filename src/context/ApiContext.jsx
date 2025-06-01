@@ -8,24 +8,86 @@ export function ApiProvider({ children }) {
   const [loading, setLoading] = useState(fact === null);
   const [error, setError] = useState(null);
 
-  function getFact() {
+  const allowedWords = [
+    "animal",
+    "insect",
+    "mammal",
+    "reptile",
+    "fish",
+    "bird",
+    "plant",
+    "tree",
+    "leaf",
+    "photosynthesis",
+    "biology",
+    "cell",
+    "genetics",
+    "organism",
+    "evolution",
+    "earth",
+    "planet",
+    "space",
+    "universe",
+    "galaxy",
+    "moon",
+    "sun",
+    "gravity",
+    "water",
+    "ocean",
+    "sea",
+    "river",
+    "lake",
+    "physics",
+    "chemistry",
+    "atom",
+    "molecule",
+    "brain",
+    "heart",
+    "body",
+    "bones",
+    "teeth",
+    "weather",
+    "cloud",
+    "lightning",
+    "rain",
+    "wind",
+    "temperature",
+    "science",
+    "scientist",
+    "experiment",
+    "discovery",
+  ];
+
+  const isFactScientific = (text) => {
+    const lower = text.toLowerCase();
+    return allowedWords.some((word) => lower.includes(word));
+  };
+
+  async function getFact() {
     setLoading(true);
+    setError(null);
     setFact(null);
 
-    fetch("https://uselessfacts.jsph.pl/api/v2/facts/random?language=en")
-      .then((res) => {
+    try {
+      let cleanFact = null;
+      while (!cleanFact) {
+        const res = await fetch(
+          "https://uselessfacts.jsph.pl/api/v2/facts/random?language=en"
+        );
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-      })
-      .then((data) => {
-        setFact(data.text);
-        localStorage.setItem("lastFact", data.text);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err);
-        setLoading(false);
-      });
+        const data = await res.json();
+
+        if (isFactScientific(data.text)) {
+          cleanFact = data.text;
+          setFact(cleanFact);
+          localStorage.setItem("lastFact", cleanFact);
+        }
+      }
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {

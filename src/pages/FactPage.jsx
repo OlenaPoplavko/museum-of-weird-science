@@ -1,6 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import CommentForm from "../components/CommentForm";
 import { useState } from "react";
+import { ArrowLeft } from "lucide-react";
+import "./FactPage.css";
 
 export default function FactPage() {
   const { id } = useParams();
@@ -8,8 +10,7 @@ export default function FactPage() {
   let fact = "";
 
   const [comments, setComments] = useState(() => {
-    const saved = JSON.parse(localStorage.getItem(`comments_${id}`)) || [];
-    return saved;
+    return JSON.parse(localStorage.getItem(`comments_${id}`)) || [];
   });
 
   const addComment = (text) => {
@@ -27,24 +28,30 @@ export default function FactPage() {
   }
 
   return (
-    <>
-      <button onClick={() => navigate(-1)}>Back</button>
-      <h2>Fact Detail</h2>
-      {fact ? <p>{fact}</p> : <p>Not found</p>}
-
-      <div className="comment-section">
-        <h3>Comments</h3>
-        {comments.length === 0 ? (
-          <p>No comments yet.</p>
-        ) : (
-          comments.map((c, idx) => (
-            <p key={idx} className="comment-item">
-              • {c}
-            </p>
-          ))
-        )}
-        <CommentForm onAdd={addComment} />
+    <div className="fact-page-container">
+      <button onClick={() => navigate(-1)} className="back-button">
+        <ArrowLeft size={18} />
+      </button>
+      <div className="fact-box">
+        <div className="fact-content">
+          <h2>Weird Science Fact</h2>
+          <p className="fact-subtitle">Did you know?</p>
+          <p className="fact-text">{fact || "Not found"}</p>
+        </div>
+        <div className="comment-section">
+          <h3>Comments</h3>
+          {comments.length === 0 ? (
+            <p>No comments yet.</p>
+          ) : (
+            comments.map((c, i) => (
+              <p key={i} className="comment-item">
+                💬 {c}
+              </p>
+            ))
+          )}
+          <CommentForm onAdd={addComment} />
+        </div>
       </div>
-    </>
+    </div>
   );
 }

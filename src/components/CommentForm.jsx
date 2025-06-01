@@ -1,4 +1,6 @@
 import { useForm } from "react-hook-form";
+import "./CommentForm.css"; // обязательно создать этот файл!
+
 function CommentForm({ onAdd }) {
   const {
     register,
@@ -13,19 +15,22 @@ function CommentForm({ onAdd }) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <label htmlFor="comment">Add your comment</label>
-        <textarea
-          id="comment"
-          {...register("comment", {
-            required: "Comment is required",
-            maxLength: { value: 200, message: "Max 200 characters" },
-          })}
-        />
-        {errors.comment && <p>{errors.comment.message}</p>}
-      </div>
-      <button type="submit">Submit</button>
+    <form onSubmit={handleSubmit(onSubmit)} className="comment-form">
+      <label htmlFor="comment">Add your comment</label>
+      <textarea
+        id="comment"
+        className="comment-textarea"
+        {...register("comment", {
+          required: "Comment is required",
+          maxLength: { value: 200, message: "Max 200 characters" },
+        })}
+      />
+      {errors.comment && (
+        <p className="error-message">{errors.comment.message}</p>
+      )}
+      <button type="submit" className="submit-button">
+        Submit
+      </button>
     </form>
   );
 }
