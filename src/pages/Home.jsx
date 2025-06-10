@@ -9,10 +9,10 @@ function Home() {
   const [favorites, setFavorites] = useLocalStorage("favorites", []);
   const navigate = useNavigate();
 
-  const isFavorite = favorites.includes(fact);
+  const isFavorite = favorites?.includes(fact) ?? false;
 
   function addToFavorites() {
-    if (fact && !favorites.some((f) => f === fact)) {
+    if (fact && !favorites?.some((f) => f === fact)) {
       setFavorites([...favorites, fact]);
       console.log("Saved to favorites:", fact);
     } else {
